@@ -28,7 +28,7 @@ TOTAL GRADE - _**100%**_
 # **FrontEnd**
 
 - FrontEnd integrated with product service HTTP API & images from S3 Bucket: https://d1umma59porlji.cloudfront.net/
-- FrontEnd Task-3 Pull Request : - https://github.com/SeLub/shop-aws-fe/pull/2
+- FrontEnd Task-3 Pull Request : - https://github.com/slubimav/epam-aws-fe/pull/2
 
 # **BackEnd**
 
@@ -42,4 +42,29 @@ TOTAL GRADE - _**100%**_
 
 # **Swagger documentation**
 
-https://app.swaggerhub.com/apis/SeLub/AWSShopAPI/1.0.0
+https://app.swaggerhub.com/apis/lubimov/product-service/3891bb50-d022-4173-b95a-9e08a8fa9c65
+
+To generate Swagger (OpenAPI) documentation and Postman collection use
+
+```
+
+npm run generate
+
+```
+
+To deploy
+
+```
+
+npm run deploy:latest
+
+
+```
+
+To run tests:
+
+```
+
+npm run test
+
+```

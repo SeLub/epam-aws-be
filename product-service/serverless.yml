@@ -1,5 +1,5 @@
 service: product-service
-frameworkVersion: "3"
+frameworkVersion: 3
 
 provider:
   name: aws
@@ -10,6 +10,8 @@ provider:
 
 plugins:
   - serverless-webpack
+  - serverless-openapi-documenter
+
 package:
   individually: true
 
@@ -21,7 +23,19 @@ functions:
           path: products
           method: get
           cors: true
-
+          documentation:
+            summary: Get products list
+            methodResponses:
+              - statusCode: 200
+                responseBody:
+                  description: Product
+                responseModels:
+                  application/json: PutDocumentResponse
+              - statusCode: 500
+                responseBody:
+                  description: An error message when get product
+                responseModels:
+                  application/json: ErrorResponse
   getProductsById:
     handler: functions/getProductsById/getProductsById.handler
     events:
@@ -29,3 +43,56 @@ functions:
           path: products/{productId}
           method: get
           cors: true
+          documentation:
+            summary: Get product by ID
+            description: Creates a user and then sends a generated password email
+            requestModels:
+              application/json: PutDocumentRequest
+            pathParams:
+              - name: productId
+                description: user ID
+                schema:
+                  type: string
+            methodResponses:
+              - statusCode: 200
+                responseBody:
+                  description: Product
+                responseModels:
+                  application/json: PutDocumentResponse
+              - statusCode: 404
+                responseBody:
+                  description: Product not found
+                responseModels:
+                  application/json: ErrorResponse
+              - statusCode: 500
+                responseBody:
+                  description: An error message when creating a new user
+                responseModels:
+                  application/json: ErrorResponse
+custom:
+  documentation:
+    servers:
+      url: https://yez09vx27k.execute-api.us-east-1.amazonaws.com/dev
+      description: The AWS dev server
+    models:
+      - name: ErrorResponse
+        description: This is an error
+        contentType: application/json
+        schema: ${file(models/ErrorResponse.json)}
+
+      - name: PutDocumentResponse
+        description: PUT Document response model (external reference example)
+        contentType: application/json
+        schema: ${file(models/PutDocumentResponse.json)}
+
+      - name: PutDocumentRequest
+        description: PUT Document request model (inline example)
+        contentType: application/json
+        schema:
+          $schema: http://json-schema.org/draft-04/schema#
+          properties:
+            SomeObject:
+              type: object
+              properties:
+                SomeAttribute:
+                  type: string
