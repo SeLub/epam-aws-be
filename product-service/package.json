@@ -28,5 +28,10 @@
     "transformIgnorePatterns": [
       "/node_modules/"
     ]
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "3.312.0",
+    "aws-sdk": "2.1357.0",
+    "uuid": "9.0.0"
   }
 }

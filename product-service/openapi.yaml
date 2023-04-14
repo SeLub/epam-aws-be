@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: product-service
   description: ''
-  version: d3e5f84d-0924-4cbe-90c3-6434149e9ed7
+  version: f4eb4149-1ccb-48aa-a5eb-490504914182
 components:
   schemas:
     PutDocumentResponse:
@@ -176,6 +176,25 @@ paths:
                 $ref: '#/components/schemas/PutDocumentResponse'
         '500':
           description: An error message when get product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      summary: Create product
+      description: ''
+      operationId: product-service-dev-createProduct
+      parameters: []
+      tags: []
+      responses:
+        '201':
+          description: Product Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PutDocumentResponse'
+        '500':
+          description: An error message when product creation
           content:
             application/json:
               schema:

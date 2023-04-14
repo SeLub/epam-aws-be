@@ -7,6 +7,24 @@ provider:
   #lambdaHashingVersion: 20201221
   stage: dev
   region: us-east-1
+  environment:
+    TABLE_NAME_PRODUCTS:
+      Ref: myProducts
+    TABLE_NAME_STOCKS:
+      Ref: myStocks
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - "Fn::GetAtt": [myProducts, Arn]
+        - "Fn::GetAtt": [myStocks, Arn]
 
 plugins:
   - serverless-webpack
@@ -69,6 +87,26 @@ functions:
                   description: An error message when creating a new user
                 responseModels:
                   application/json: ErrorResponse
+  createProduct:
+    handler: functions/createProduct/createProduct.handler
+    events:
+      - http:
+          path: products
+          method: post
+          cors: true
+          documentation:
+            summary: Create product
+            methodResponses:
+              - statusCode: 201
+                responseBody:
+                  description: Product Created
+                responseModels:
+                  application/json: PutDocumentResponse
+              - statusCode: 500
+                responseBody:
+                  description: An error message when product creation
+                responseModels:
+                  application/json: ErrorResponse
 custom:
   documentation:
     servers:
@@ -96,3 +134,32 @@ custom:
               properties:
                 SomeAttribute:
                   type: string
+
+resources:
+  Resources:
+    myProducts:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: myProducts
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 10
+          WriteCapacityUnits: 10
+    myStocks:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: myStocks
+        AttributeDefinitions:
+          - AttributeName: product_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: product_id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 10
+          WriteCapacityUnits: 10
