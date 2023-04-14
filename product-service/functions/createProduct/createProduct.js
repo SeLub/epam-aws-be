@@ -1,4 +1,20 @@
-import { Client } from 'pg';
+/* Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+SPDX-License-Identifier: Apache-2.0
+ABOUT THIS NODE.JS EXAMPLE: This example works with the AWS SDK for JavaScript (v3),
+which is available at https://github.com/aws/aws-sdk-js-v3. This example is in the 'AWS SDK for JavaScript v3 Developer Guide' at
+// https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/dynamodb-example-table-read-write.html.
+Purpose:
+ddb_putitem.js demonstrates how to create or replace an item in an Amazon DynamoDB table.
+INPUTS:
+- TABLE_NAME
+Running the code:
+node ddb_putitem.js
+*/
+// snippet-start:[dynamodb.JavaScript.item.putItemV3]
+
+// Import required AWS SDK clients and commands for Node.js
+import { PutItemCommand } from '@aws-sdk/client-dynamodb';
+import { ddbClient } from '../../libs/ddbClient.js'
 
 const handleResponse = (products = {}, status = 200) => ({
   headers: {
@@ -10,91 +26,46 @@ const handleResponse = (products = {}, status = 200) => ({
   body: JSON.stringify(products),
 });
 
-const { PG_HOST, PG_PORT, PG_DATABASE, PG_USERNAME, PG_PASSWORD } = process.env;
-
-const credentials = {
-  user: PG_USERNAME,
-  host: PG_HOST,
-  database: PG_DATABASE,
-  password: PG_PASSWORD,
-  port: PG_PORT,
-  ssl: {
-    rejectUnauthorized: false,
-  },
-  connectionTimeoutMillis: 5000,
-};
-
-let data_export = {}, error_code = 200;
-
-
 export const handler = async event => {
-  
-  console.log(event);
-
-  const client = new Client(credentials);
-  
-  client.on('error', err => {
-                            data_export = 'DB Client Error 500:' + err.stack;
-                            error_code = 500;
-                            console.error('DB Client Error 500:', err.stack);
-                            })
-
-  await client
-          .connect()
-          .then(() => console.log('Client connected'))
-          .catch(err => {data_export = 'DB connection error:' + err.stack; error_code = 500})
-
+  const params = {
+    TableName: "myProducts",
+    Item: {
+      id: { S: "7567ec4b-b10c-48c5-9345-fc73c48a80aa" },
+      title: { S: "Laptop Intel Celeron N4020 Processor, 4GB DDR4 RAM, 64 GB SSD" },
+      description: { S: "This everyday laptop is powered by an Intel Celeron N4020 processor, 4GB DDR4 RAM, and 64 GB M.2 PCIe SSD storage"},
+      price: { N: "25.59"}
+    },
+  };
 
   try {
-      
-      const { title, description, price, imageid, count } = JSON.parse(event.body);
-      
-      if (typeof title === 'undefined' || title === '') { data_export = 'Not valid data for product creation' ; error_code = 400; return handleResponse(data_export, error_code); }
-
-      await client.query('BEGIN');
-
-      const queryProduct = 'INSERT INTO products(title, description, price, imageid) VALUES($1, $2, $3, $4) RETURNING id';
-
-      const valuesProduct = [title, description, price, imageid];
-
-      const queryStock = 'INSERT INTO stocks(product_id, count) VALUES($1, $2)';
-
-      const {rows: products} = await client.query(queryProduct, valuesProduct);
-
-      const productId = products[0].id;
-
-      const countStock = [productId, count];
-
-      await client.query(queryStock, countStock);
-    
-      console.log("Product created:" + productId);
-    
-      await client.query('COMMIT');
-    
-      data_export = {
-                    title,
-                    description,
-                    price,
-                    imageid,
-                    count,
-                    id: productId,
-                    };
-      
-      error_code = 200;
-
-      } catch (err) {
-    
-      data_export = 'DB insert error 500:' + err; error_code = 500;
-
-      await client.query('ROLLBACK');
-    
-      throw new Error('Failed to create product in database + ' + err);
-  
-      } finally {
-    
-      client.end();
-
-      return handleResponse(data_export, error_code);
-      
-      }
+    const data = await ddbClient.send(new PutItemCommand(params));
+    console.log(data);
+    return handleResponse({data}, 200)
+  } catch (error) {
+    console.error(error);
+    return handleResponse({error}, 500)
+  }
 };
+
+
+// import { DynamoDB } from 'aws-sdk';
+
+// const db = new DynamoDB.DocumentClient()
+// const TableName = 'myProducts'
+
+export default async (event) => {
+  const newAnimal = {
+    title: event.body.title,
+    description: event.body.description,
+    price: event.body.price,
+  }
+
+//   await db
+//     .put({
+//       TableName,
+//       Item: newAnimal,
+//     })
+//     .promise()
+
+//   return { statusCode: 200, body: JSON.stringify(newAnimal) }
+// }
