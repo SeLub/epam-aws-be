@@ -8,11 +8,23 @@ provider:
   stage: dev
   region: us-east-1
   environment:
-    PG_HOST: ${env:PG_HOST}
-    PG_PORT: ${env:PG_PORT}
-    PG_DATABASE: ${env:PG_DATABASE}
-    PG_USERNAME: ${env:PG_USERNAME}
-    PG_PASSWORD: ${env:PG_PASSWORD}
+    TABLE_NAME_PRODUCTS:
+      Ref: myProducts
+    TABLE_NAME_STOCKS:
+      Ref: myStocks
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - "Fn::GetAtt": [myProducts, Arn]
+        - "Fn::GetAtt": [myStocks, Arn]
 
 plugins:
   - serverless-webpack
@@ -125,16 +137,29 @@ custom:
 
 resources:
   Resources:
-    myTable:
+    myProducts:
       Type: AWS::DynamoDB::Table
-        Properties:
-        TableName: myTable
+      Properties:
+        TableName: myProducts
         AttributeDefinitions:
-          - AttributeName: name
+          - AttributeName: id
             AttributeType: S
         KeySchema:
-          - AttributeName: name
+          - AttributeName: id
             KeyType: HASH
         ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+          ReadCapacityUnits: 10
+          WriteCapacityUnits: 10
+    myStocks:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: myStocks
+        AttributeDefinitions:
+          - AttributeName: product_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: product_id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 10
+          WriteCapacityUnits: 10
