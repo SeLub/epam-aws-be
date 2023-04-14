@@ -2,7 +2,7 @@
 
 Self check:
 
-TOTAL GRADE - _**100%**_
+TOTAL GRADE - _**70%**_
 
 ---
 
