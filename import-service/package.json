@@ -1,0 +1,33 @@
+{
+  "name": "import-service",
+  "version": "1.0.0",
+  "description": "Import service for EPAM AWS backend",
+  "main": "handler.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SeLub/epam-aws-be.git"
+  },
+  "author": "Siarhei Liubimau",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SeLub/epam-aws-be/issues"
+  },
+  "homepage": "https://github.com/SeLub/epam-aws-be#readme",
+  "devDependencies": {
+    "@babel/core": "^7.15.5",
+    "@babel/preset-env": "^7.15.6",
+    "aws-sdk-mock": "^5.3.0",
+    "jest": "^27.2.1",
+    "serverless-webpack": "^5.5.4",
+    "webpack": "^5.53.0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.32.0",
+    "@aws-sdk/s3-request-presigner": "^3.32.0",
+    "aws-sdk": "^2.991.0",
+    "csv-parser": "^3.0.0"
+  }
+}
