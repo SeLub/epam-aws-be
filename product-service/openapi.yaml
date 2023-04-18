@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: product-service
   description: ''
-  version: f4eb4149-1ccb-48aa-a5eb-490504914182
+  version: 03507dbe-bb09-4b53-8ea8-1f235904b442
 components:
   schemas:
     PutDocumentResponse:
