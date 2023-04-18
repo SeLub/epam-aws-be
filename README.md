@@ -1,4 +1,4 @@
-# **Task 4**
+# **Task 5**
 
 Self check:
 
@@ -6,43 +6,45 @@ TOTAL GRADE - _**100%**_
 
 ---
 
-## **Evalution Criteria**
+## **Evaluation criteria**
 
-- [x] 1 - poiproduct-service serverless config contains configuration for 2 lambda functions, API is not working at all, but YAML configuration is correct
-- [x] 2 - The getProductsList OR getProductsById lambda function returns a correct response (POINT1)
-- [x] 3 - The getProductsById AND getProductsList lambda functions return a correct response code (POINT2)
-- [x] 4 - Your own Frontend application is integrated with product service (/products API) and products from product-service are represented on Frontend. AND POINT1 and POINT2 are done.
+- [x] Cr.1: +1 - File serverless.yml contains configuration for importProductsFile function
+- [x] Cr.2: +3 - The importProductsFile lambda function returns a correct response which can be used to upload a file into the S3 bucket
+- [x] Cr.3: +4 - Frontend application is integrated with importProductsFile lambda
+- [x] Cr.4: +5 - The importFileParser lambda function is implemented and serverless.yml contains configuration for the lambda
 
-## **Additional options**
+## **Additional (optional) tasks**
 
-- [x] Async/await is used in lambda functions.
-- [x] ES6 modules are used for product-service implementation.
-- [x] Webpack is configured for product-service.
-- [x] SWAGGER documentation is created for product-service.
-- [x] Lambda handlers are covered by basic UNIT tests (NO infrastructure logic is needed to be covered)
-- [x] Lambda handlers (getProductsList, getProductsById) code is written not in 1 single module (file) and separated in codebase.
-- [x] Main error scenarious are handled by API ("Product not found" error).
+- [x] Ad.1: +1 (for JS only) - async/await is used in lambda functions
+- [x] Ad.2: +1 (All languages) - importProductsFile lambda is covered by unit tests ((for JS only) aws-sdk-mock can be used to mock S3 methods
+- [x] Ad.3: +1 (All languages) - At the end of the stream the lambda function should move the file from the uploaded folder into the parsed folder (move the file means that file should be copied into parsed folder, and then deleted from uploaded folder)
 
 ---
 
-# **FrontEnd**
+# **Summary Report**
 
-- FrontEnd integrated with product service HTTP API & images from S3 Bucket: https://d1umma59porlji.cloudfront.net/
-- FrontEnd Task-3 Pull Request : - https://github.com/slubimav/epam-aws-fe/pull/2
-
-# **BackEnd**
-
-| Lambda          | Description                   | Method | URL                                                                                                      |
-| --------------- | ----------------------------- | ------ | -------------------------------------------------------------------------------------------------------- |
-| getProductsList | get ALL products              | GET    | https://yez09vx27k.execute-api.us-east-1.amazonaws.com/dev/products                                      |
-| getProductsById | get ONE product in JSON by id | GET    | https://yez09vx27k.execute-api.us-east-1.amazonaws.com/dev/products/7567ec4b-b10c-48c5-9345-fc73c48a80a2 |
-| getProductsById | Product not found             | GET    | https://yez09vx27k.execute-api.us-east-1.amazonaws.com/dev/products/777                                  |
+| Evaluation criteria | Description                                                   | URL                                                                                                                     |
+| ------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Cr.1                | Link to serverless.yml with importProductsFile function       | https://github.com/SeLub/epam-aws-be/blob/task-5/import-service/serverless.yml                                          |
+| Cr.2                | SignedURL to upload CSV in S3 by importProductsFile lambda    | https://48dym36hi5.execute-api.us-east-1.amazonaws.com/dev/import/?name=product.csv                                     |
+| Cr.3                | Try youself by sending CSV and check errors in Chrome console | https://d3ph6tvz43noms.cloudfront.net/admin/products                                                                    |
+| Cr.4                | Link to importFileParser. Link to serverless.yml see in Cr.1  | https://github.com/SeLub/epam-aws-be/blob/task-5/import-service/functions/importFileParser/importFileParser.js          |
+| Ad.1                | async/await is used in importProductsFile                     | https://github.com/SeLub/epam-aws-be/blob/task-5/import-service/functions/importProductsFile/importProductsFile.js      |
+| Ad.1                | async/await is used in importFileParser                       | https://github.com/SeLub/epam-aws-be/blob/task-5/import-service/functions/importFileParser/importFileParser.js          |
+| Ad.2                | Please check code by link and screenshots below               | https://github.com/SeLub/shop-aws-be/blob/task-5/import-service/functions/importProductsFile/importProductsFile.test.js |
+| Ad.3                | Please check code (Line 35-36) and screenshots below          | https://github.com/SeLub/shop-aws-be/blob/task-5/import-service/functions/importFileParser/importFileParser.js          |
 
 ---
 
 # **Swagger documentation**
 
+## Product Service
+
 https://app.swaggerhub.com/apis/lubimov/product-service/3891bb50-d022-4173-b95a-9e08a8fa9c65
+
+## Import Service
+
+https://app.swaggerhub.com/apis/lubimov/import-service/32dc6f64-8763-4df6-9780-292b4efc0457
 
 To generate Swagger (OpenAPI) documentation and Postman collection use
 

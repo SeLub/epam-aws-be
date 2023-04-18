@@ -5,6 +5,7 @@
   "main": "handler.js",
   "scripts": {
     "test": "jest",
+    "deploy:latest": "serverless deploy",
     "generate": "serverless openapi generate -o openapi.yaml -f yaml -a 3.0.3 -p postman.json"
   },
   "repository": {
