@@ -23,7 +23,7 @@ export const handler = async event => {
 
           const bucketParams = { Bucket: BACKET, Key: catalogPath, ContentType: 'text/csv' }
 
-          const client = new S3Client({ region: 'eu-central-1' });
+          const client = new S3Client({ region: 'us-east-1' });
           
           const command = new PutObjectCommand(bucketParams);
   
@@ -33,7 +33,7 @@ export const handler = async event => {
             
     //        console.log(`Getting signedUrl to put "${catalogPath}" to "${bucketParams.Backet}".\nSinedURL :`, url);
       
-            resault = url; stCode = 202;
+            resault = url; stCode = 200;
         
           } catch (err) {
             
