@@ -27,12 +27,12 @@ TOTAL GRADE - _**100%**_
 | ------------------- | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
 | Cr.1                | Link to serverless.yml with importProductsFile function      | https://github.com/SeLub/epam-aws-be/blob/task-5/import-service/serverless.yml                                          |
 | Cr.2                | SignedURL to upload CSV in S3 by importProductsFile lambda   | https://48dym36hi5.execute-api.us-east-1.amazonaws.com/dev/import/?name=product.csv                                     |
-| Cr.3                | Frontend                                                     | https://d1umma59porlji.cloudfront.net/products                                                                          |
+| Cr.3                | Frontend                                                     | https://d1umma59porlji.cloudfront.net/                                                                                  |
 | Cr.4                | Link to importFileParser. Link to serverless.yml see in Cr.1 | https://github.com/SeLub/epam-aws-be/blob/task-5/import-service/functions/importFileParser/importFileParser.js          |
 | Ad.1                | async/await is used in importProductsFile                    | https://github.com/SeLub/epam-aws-be/blob/task-5/import-service/functions/importProductsFile/importProductsFile.js      |
 | Ad.1                | async/await is used in importFileParser                      | https://github.com/SeLub/epam-aws-be/blob/task-5/import-service/functions/importFileParser/importFileParser.js          |
-| Ad.2                | Please check code by link and screenshots below              | https://github.com/SeLub/epam-aws-be/blob/task-5/import-service/functions/importProductsFile/importProductsFile.test.js |
-| Ad.3                | Please check code (Line 35-36) and screenshots below         | https://github.com/SeLub/epam-aws-be/blob/task-5/import-service/functions/importFileParser/importFileParser.js          |
+| Ad.2                | Please check code by link                                    | https://github.com/SeLub/epam-aws-be/blob/task-5/import-service/functions/importProductsFile/importProductsFile.test.js |
+| Ad.3                | Please check code (Line 35-36)                               | https://github.com/SeLub/epam-aws-be/blob/task-5/import-service/functions/importFileParser/importFileParser.js          |
 
 ---
 
