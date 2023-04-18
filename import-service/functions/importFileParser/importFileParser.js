@@ -5,7 +5,7 @@ export const handler = async event => {
 
   const BUCKET = event.Records[0].s3.bucket.name;
 
-  const s3 = new S3({region: 'eu-central-1'});
+  const s3 = new S3({region: 'us-east-1'});
 
   let resault =[], stCode = '';
   

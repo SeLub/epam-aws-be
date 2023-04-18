@@ -2,15 +2,11 @@ service: import-service
 
 frameworkVersion: 3
 
-custom:
-  bucket: task-5-csv-uploaded
-
 provider:
   name: aws
   runtime: nodejs14.x
-  lambdaHashingVersion: 20201221
   stage: dev
-  region: eu-central-1
+  region: us-east-1
   s3:
     bucketOne:
       name: ${self:custom.bucket}
@@ -64,7 +60,6 @@ functions:
                   description: An error message when creating a preSigned URL
                 responseModels:
                   application/json: ErrorResponse
-
   importFileParser:
     handler: functions/importFileParser/importFileParser.handler
     events:
@@ -73,31 +68,27 @@ functions:
         rules:
           - prefix: uploaded/
           - suffix: .csv
-          documentation:
-            summary: Import File Parser
-            description: Creates bucket and return preSigned Url to import file in the bucket
-            requestModels:
-              application/json: PutDocumentRequest
-            queryParams:
-              - name: name
-                description: name of file to import in the bucket
-                schema:
-                  type: string
-            methodResponses:
-              - statusCode: 200
-                responseBody:
-                  description: PreSigned URL
-                responseModels:
-                  application/json: PutDocumentResponse
-              - statusCode: 500
-                responseBody:
-                  description: An error message when creating a preSigned URL
-                responseModels:
-                  application/json: ErrorResponse
+        documentation:
+          summary: Parse CSV file
+          description: Parse CSV file loaded in the bucket
+          requestModels:
+            application/json: PutDocumentRequest
+          methodResponses:
+            - statusCode: 200
+              responseBody:
+                description:
+              responseModels:
+                application/json: PutDocumentResponse
+            - statusCode: 500
+              responseBody:
+                description: An error message while parsing CSV
+              responseModels:
+                application/json: ErrorResponse
 custom:
+  bucket: task-5-csv-uploaded
   documentation:
     servers:
-      url: https://yez09vx27k.execute-api.us-east-1.amazonaws.com/dev
+      url: https://yz57evquwe.execute-api.eu-central-1.amazonaws.com/dev
       description: The EPAM AWS backend - Import Service
     models:
       - name: ErrorResponse
