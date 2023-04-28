@@ -51,7 +51,7 @@ try {
               };
 
 // Create promise and SNS service object
-let publishTextPromise = new AWS.SNS({apiVersion: '2010-03-31', region: 'eu-central-1'}).publish(params).promise();
+let publishTextPromise = new AWS.SNS({apiVersion: '2010-03-31', region: 'us-east-1'}).publish(params).promise();
 
 // Handle promise's fulfilled/rejected states
 publishTextPromise
