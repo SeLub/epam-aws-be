@@ -63,27 +63,12 @@ functions:
   importFileParser:
     handler: functions/importFileParser/importFileParser.handler
     events:
-      - s3: bucketOne
-        event: s3:ObjectCreated:*
-        rules:
-          - prefix: uploaded/
-          - suffix: .csv
-        documentation:
-          summary: Parse CSV file
-          description: Parse CSV file loaded in the bucket
-          requestModels:
-            application/json: PutDocumentRequest
-          methodResponses:
-            - statusCode: 200
-              responseBody:
-                description:
-              responseModels:
-                application/json: PutDocumentResponse
-            - statusCode: 500
-              responseBody:
-                description: An error message while parsing CSV
-              responseModels:
-                application/json: ErrorResponse
+      - s3:
+          bucket: bucketOne
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: uploaded/
+            - suffix: .csv
 custom:
   bucket: task-5-csv-uploaded
   documentation:
