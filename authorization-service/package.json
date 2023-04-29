@@ -1,0 +1,27 @@
+{
+  "name": "authorization-service",
+  "version": "1.0.0",
+  "description": "Authorization service for AWS Shop",
+  "main": "handler.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SeLub/epam-aws-be.git"
+  },
+  "keywords": [
+    "aws",
+    "shop"
+  ],
+  "author": "Sergey Lubimov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SeLub/epam-aws-be/issues"
+  },
+  "devDependencies": {
+    "serverless-dotenv-plugin": "^6.0.0",
+    "serverless-webpack": "^5.11.0",
+    "webpack": "^5.81.0"
+  }
+}

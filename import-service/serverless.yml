@@ -1,6 +1,7 @@
 service: import-service
 
 frameworkVersion: 3
+useDotenv: true
 
 provider:
   name: aws
@@ -9,7 +10,7 @@ provider:
   region: us-east-1
   s3:
     bucketOne:
-      name: ${self:custom.bucket}
+      name: ${env:BUCKET}
       corsConfiguration:
         CorsRules:
           - AllowedMethods:
@@ -20,8 +21,33 @@ provider:
               - "*"
             AllowedHeaders:
               - "*"
+  apiGateway:
+    minimumCompressionSize: 1024
+    shouldStartNameWithService: true
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+    BUCKET: ${env:BUCKET}
+    SQS_URL: !ImportValue SQSQueueLink
+    SQS_ARN: !ImportValue SQSQueueArn
+iam:
+  role:
+    statements:
+      - Effect: Allow
+        Action: s3:ListBucket
+        Resource:
+          - arn:aws:s3:::${env:BUCKET}
+      - Effect: Allow
+        Action:
+          - s3:*
+        Resource:
+          - arn:aws:s3:::${env:BUCKET}/*
+      - Effect: Allow
+        Action: sqs:*
+        Resource:
+          - !ImportValue SQSQueueArn
 plugins:
   - serverless-webpack
+  - serverless-dotenv-plugin
   - serverless-openapi-documenter
 
 package:
@@ -35,6 +61,11 @@ functions:
           path: /import
           method: get
           cors: true
+          authorizer:
+            name: basicAuthorizer
+            type: TOKEN
+            arn: !ImportValue BasicAuthorizerArn
+            identitySource: method.request.header.Authorization
           request:
             parameters:
               querystrings:
@@ -70,7 +101,6 @@ functions:
             - prefix: uploaded/
             - suffix: .csv
 custom:
-  bucket: task-5-csv-uploaded
   documentation:
     servers:
       url: https://yz57evquwe.execute-api.eu-central-1.amazonaws.com/dev
@@ -97,3 +127,41 @@ custom:
               properties:
                 SomeAttribute:
                   type: string
+  dotenv:
+    required:
+      file: true
+  webpack:
+    webpackConfig: "./webpack.config.js"
+    includeModules: true
+resources:
+  Resources:
+    RestApi:
+      Type: AWS::ApiGateway::RestApi
+      Properties:
+        Name: aws-shop
+    GatewayResponseDefault4XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_4XX
+        RestApiId: !Ref RestApi
+
+    GatewayResponseUnauthorized:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: UNAUTHORIZED
+        RestApiId: !Ref RestApi
+
+    GatewayResponseDefault5XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_5XX
+        RestApiId: !Ref RestApi
