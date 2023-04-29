@@ -1,0 +1,41 @@
+service: authorization-service
+frameworkVersion: 3
+useDotenv: true
+
+custom:
+  webpack:
+    webpackConfig: "./webpack.config.js"
+    includeModules: true
+  dotenv:
+    required:
+      file: true
+
+plugins:
+  - serverless-webpack
+  - serverless-dotenv-plugin
+
+package:
+  individually: true
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  region: us-east-1
+  apiGateway:
+    minimumCompressionSize: 1024
+    shouldStartNameWithService: true
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+
+functions:
+  basicAuthorizer:
+    handler: functions/basicAuthorizer/basicAuthorizer.handler
+
+resources:
+  Outputs:
+    BasicAuthorizerArn:
+      Description: Export ARN of basicAuthorizer Lambda for import-service
+      Value: !GetAtt BasicAuthorizerLambdaFunction.Arn
+      Export:
+        Name: BasicAuthorizerArn
